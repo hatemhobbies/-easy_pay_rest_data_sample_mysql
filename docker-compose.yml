@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  mysql-docker-container:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - /data/mysql
+    ports:
+      - 3306:3306
+    container_name: epmysql
+  wallet-app:
+    image: capstone-project/wallet
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      - MYSQL_HOST=epmysql
+    depends_on:
+      - mysql-docker-container
+    ports:
+      - 8080:8080
+    volumes:
+      - /data/walletservice
+    container_name: walletservice
